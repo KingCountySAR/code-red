@@ -16,7 +16,7 @@ namespace Kcsar.Paging.Web.Controllers
 
     public HomeController(IConfiguration config, CodeRedService codeRed)
     {
-      bool understood = Boolean.TryParse(config["disarm"] ?? "true", out bool parsed);
+      bool understood = Boolean.TryParse(config["disarm"] ?? "false", out bool parsed);
       armed = understood && !parsed;
 
       this.codeRed = codeRed;
@@ -25,7 +25,7 @@ namespace Kcsar.Paging.Web.Controllers
     [HttpGet]
     public IActionResult Index()
     {
-      ViewData["disarmed"] = !armed;
+      ViewData["disarmed"] = (!armed).ToString();
       return View();
     }
 

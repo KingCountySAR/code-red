@@ -7,7 +7,7 @@
   <h3>Send a page to ESAR</h3>
   <form method="post" style="display:flex; flex-direction:column">
     <div class="form-group">
-      @if (ViewData["disarmed"] == "true")
+      @if ((string)ViewData["disarmed"] == true.ToString())
       {
         <p class="alert alert-info">System is disarmed</p>
       }
