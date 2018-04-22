@@ -1,0 +1,21 @@
+﻿@model SendMessageModel
+@{
+  ViewData["Title"] = "Home Page";
+}
+
+<div style="">
+  <h3>Send a page to ESAR</h3>
+  <form method="post" style="display:flex; flex-direction:column">
+    <div class="form-group">
+      @if (ViewData["disarmed"] == "true")
+      {
+        <p class="alert alert-info">System is disarmed</p>
+      }
+      <div asp-validation-summary="All"></div>
+      <label asp-for="Message">Message</label>
+      <textarea asp-for="Message" class="form-control" rows="3"></textarea>
+      <span asp-validation-for="Message" ></span>
+    </div>
+    <button type="submit" style="align-self: flex-end" class="btn btn-primary">Send</button>
+  </form>
+</div>
