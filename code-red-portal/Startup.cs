@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
+using Twilio;
 
 namespace Kcsar.Paging.Web
 {
@@ -42,6 +43,14 @@ namespace Kcsar.Paging.Web
       });
 
       services.AddSingleton<CodeRedService>();
+
+      var twilioSid = Configuration["twilio:sid"];
+      var twilioToken = Configuration["twilio:token"];
+
+      if (!(string.IsNullOrWhiteSpace(twilioSid) || string.IsNullOrWhiteSpace(twilioToken)))
+      {
+        TwilioClient.Init(twilioSid, twilioToken);
+      }
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
