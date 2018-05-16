@@ -18,6 +18,7 @@ namespace Kcsar.Paging.Web
     private readonly string launchCode;
     private readonly string audience;
     private readonly string subject;
+    private readonly string smsPrefix;
 
     public CodeRedService(IConfiguration config)
     {
@@ -26,6 +27,7 @@ namespace Kcsar.Paging.Web
       launchCode = config["codered:launch"];
       audience = config["codered:audience"];
       subject = config["codered:subject"];
+      smsPrefix = config["codered:smsPrefix"] ?? string.Empty;
     }
 
     public async Task SendMessage(string fromEmail, string text)
@@ -88,6 +90,7 @@ namespace Kcsar.Paging.Web
           { "MessageID", messageId },
           { "SMSSender", "" },
           { "SMSSubject", "" },
+          { "SMSBody", smsPrefix + theMessage },
           { "SMSBody", theMessage },
           { "ReplySMSBody", "." }
         }),
