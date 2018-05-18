@@ -91,7 +91,6 @@ namespace Kcsar.Paging.Web
           { "SMSSender", "" },
           { "SMSSubject", "" },
           { "SMSBody", smsPrefix + theMessage },
-          { "SMSBody", theMessage },
           { "ReplySMSBody", "." }
         }),
         "Couldn't set SMS message"
