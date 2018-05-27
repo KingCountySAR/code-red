@@ -1,6 +1,7 @@
 ﻿using Kcsar.Paging.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ namespace Kcsar.Paging.Web.Controllers
   {
     private readonly Boolean armed;
     private readonly CodeRedService codeRed;
+    private readonly string groupName;
 
     public HomeController(IConfiguration config, CodeRedService codeRed)
     {
@@ -20,6 +22,13 @@ namespace Kcsar.Paging.Web.Controllers
       armed = understood && !parsed;
 
       this.codeRed = codeRed;
+      this.groupName = string.IsNullOrEmpty(config["groupName"]) ? "ESAR" : config["groupName"];
+    }
+
+    public override void OnActionExecuted(ActionExecutedContext context)
+    {
+      ViewData["groupName"] = groupName;
+      base.OnActionExecuted(context);
     }
 
     [HttpGet]
