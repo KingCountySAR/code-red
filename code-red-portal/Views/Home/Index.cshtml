@@ -5,7 +5,7 @@
 
 <div style="">
   <h3>Send a page to @ViewData["groupName"]</h3>
-  <form method="post" style="display:flex; flex-direction:column">
+  <form method="post" style="display:flex; flex-direction:column" onsubmit="document.getElementById('sendButton').disabled = true; debugger;">
     <div class="form-group">
       @if ((string)ViewData["disarmed"] == true.ToString())
       {
@@ -16,6 +16,6 @@
       <textarea asp-for="Message" class="form-control" rows="3"></textarea>
       <span asp-validation-for="Message" ></span>
     </div>
-    <button type="submit" style="align-self: flex-end" class="btn btn-primary">Send</button>
+    <button id="sendButton" type="submit" style="align-self: flex-end" class="btn btn-primary">Send</button>
   </form>
 </div>
