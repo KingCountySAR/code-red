@@ -22,7 +22,7 @@ namespace Kcsar.Paging.Web.Controllers
       this.codeRed = codeRed;
       this.log = log;
 
-      whitelist = (config["smsWhitelist"] ?? "").Split(',').Select(f => f.Split(':')).Where(f => f.Length == 2).ToDictionary(f => f[0], f => f[1]);
+      whitelist = (config["smsWhitelist"] ?? "").Split(',').Select(f => f.Split(':')).Where(f => f.Length == 2).ToDictionary(f => f[0].Trim(), f => f[1].Trim());
     }
 
     // GET: Incoming messages
