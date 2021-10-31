@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace Kcsar.Paging.Web
 {
@@ -8,21 +8,22 @@ namespace Kcsar.Paging.Web
   {
     public static void Main(string[] args)
     {
-      BuildWebHost(args).Run();
+      CreateHostBuilder(args).Build().Run();
     }
 
-    public static IWebHost BuildWebHost(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
-            .ConfigureAppConfiguration((hosting, config) =>
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
             {
-              var env = hosting.HostingEnvironment;
-
-              config.AddJsonFile("appsettings.json", true, true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
-                    .AddJsonFile("appsettings.local.json", true, true)
-                    .AddEnvironmentVariables();
+              webBuilder.UseStartup<Startup>();
             })
-            .Build();
+      .ConfigureAppConfiguration((hosting, config) =>
+      {
+        var env = hosting.HostingEnvironment;
+        config.AddJsonFile("appsettings.json", true, true)
+          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+          .AddJsonFile("appsettings.local.json", true, true)
+          .AddEnvironmentVariables();
+      });
   }
 }

@@ -14,8 +14,7 @@ namespace Kcsar.Paging.Web.Controllers
   {
     private readonly CodeRedService codeRed;
     private readonly ILogger<TextController> log;
-
-    Dictionary<string, string> whitelist;
+    readonly Dictionary<string, string> whitelist;
 
     public TextController(CodeRedService codeRed, IConfiguration config, ILogger<TextController> log)
     {

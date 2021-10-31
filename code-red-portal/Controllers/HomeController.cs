@@ -12,13 +12,13 @@ namespace Kcsar.Paging.Web.Controllers
   [Authorize]
   public class HomeController : Controller
   {
-    private readonly Boolean armed;
+    private readonly bool armed;
     private readonly CodeRedService codeRed;
     private readonly string groupName;
 
     public HomeController(IConfiguration config, CodeRedService codeRed)
     {
-      bool understood = Boolean.TryParse(config["disarm"] ?? "false", out bool parsed);
+      bool understood = bool.TryParse(config["disarm"] ?? "false", out bool parsed);
       armed = understood && !parsed;
 
       this.codeRed = codeRed;
