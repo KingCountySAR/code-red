@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Kcsar.Paging.Web.Controllers
 {
-  [Authorize]
+  [Authorize(Policy = "UnitMember")]
   public class HomeController : Controller
   {
     private readonly bool armed;

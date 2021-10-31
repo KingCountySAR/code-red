@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +33,20 @@ namespace Kcsar.Paging.Web
         options.ClientId = Configuration["auth:clientId"];
         options.ClientSecret = Configuration["auth:clientSecret"];
         options.AuthorizationEndpoint += $"?hd=${Configuration["auth:domain"]}";
+      });
+
+      var allowedDomains = new List<string> { Configuration["auth:domain"] };
+      allowedDomains.AddRange((Configuration["auth:otherDomains"] ?? "").Split(',').Select(d => d.Trim()).Where(d => !string.IsNullOrWhiteSpace(d)));
+
+      services.AddAuthorization(config =>
+      {
+        config.AddPolicy("UnitMember", policy =>
+          policy.RequireAssertion(context =>
+            context.User.HasClaim(c =>
+              c.Type == System.Security.Claims.ClaimTypes.Email && allowedDomains.Any(d => c.Value.EndsWith($"@{d}"))
+            )
+          )
+        );
       });
 
       services.AddSingleton<CodeRedService>();
