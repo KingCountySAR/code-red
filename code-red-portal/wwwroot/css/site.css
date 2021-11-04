@@ -8,3 +8,8 @@ body {
     padding-left: 15px;
     padding-right: 15px;
 }
+
+.validation-summary-errors {
+  color: red;
+  font-size: 150%;
+}

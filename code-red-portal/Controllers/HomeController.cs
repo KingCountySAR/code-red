@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Kcsar.Paging.Web.Controllers
@@ -41,11 +42,14 @@ namespace Kcsar.Paging.Web.Controllers
     [HttpPost]
     public async Task<IActionResult> Index([FromForm] SendMessageModel model)
     {
+      string email = User.FindFirst(ClaimTypes.Email)?.Value;
+      if (string.IsNullOrWhiteSpace(email)) ModelState.AddModelError("email", "Can't get user email");
+
       if (ModelState.IsValid)
       {
         if (armed)
         {
-          await codeRed.SendMessage($"{User.FindFirst("email")?.Value}", model.Message);
+          await codeRed.SendMessage(email, model.Message);
         }
 
         return RedirectToAction(nameof(Success), new SuccessModel
