@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import SignIn from "@/components/sign-in";
+import TitleBar from "@/components/title-bar";
 
 export default async function AuthedLayout({
   children,
@@ -9,7 +10,12 @@ export default async function AuthedLayout({
   const session = (await auth())!;
 
   if (session?.user) {
-    return children;
+    return (
+      <div className="flex flex-col min-h-screen">
+        <TitleBar team={process.env.TEAM_NAME ?? 'Your Team'} name={session.user.name} />
+        {children}
+      </div>
+    );
   }
 
   return (
