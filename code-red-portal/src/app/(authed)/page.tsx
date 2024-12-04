@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { sendMessage } from "./actions";
+import OneShotSubmit from "@/components/one-shot-submit";
 
 export default async function Home() {
   const session = (await auth())!;
@@ -13,7 +14,7 @@ export default async function Home() {
             <textarea name="message" className="flex textarea textarea-bordered" placeholder="Message Content" required />
           </div>
           <div className="flex justify-end py-3">
-            <button className="btn btn-primary" type="submit">Send</button>
+            <OneShotSubmit text="Send" />
           </div>
         </form>
       </main>

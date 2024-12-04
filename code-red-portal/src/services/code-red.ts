@@ -32,10 +32,10 @@ class CodeRed {
     }
 
     const token = (await authResponse.json()).access_token;
-    let recipients: {groups: string[]}|{contacts:{contactId: string}[]} = { groups: [ process.env.CODERED_GROUP ?? '' ]};
+    let recipients: { groups: string[] } | { contacts: { contactId: string }[] } = { groups: [process.env.CODERED_GROUP ?? ''] };
     if (process.env.CODERED_CONTACT) {
       console.log('Sending to test contact', process.env.CODERED_CONTACT);
-      recipients = ({ contacts: [ { contactId: process.env.CODERED_CONTACT }]});
+      recipients = ({ contacts: [{ contactId: process.env.CODERED_CONTACT }] });
     }
 
     const alertData = {
@@ -44,7 +44,7 @@ class CodeRed {
           recipients,
         },
         locationOverride: {
-          overrideDevices: AVOID_DEVICES.map(t => ({ deviceType: t, priority: "off"})),
+          overrideDevices: AVOID_DEVICES.map(t => ({ deviceType: t, priority: "off" })),
         },
         divison: "/COUNTY/KCSO/SPECOPS/SAR",
         title: process.env.CODERED_SUBJECT ?? 'No subject',
@@ -61,18 +61,23 @@ class CodeRed {
       }
     };
 
-    const res = await fetch("https://cascades.onsolve.net/api/v1/Alerts/oneStep", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify(alertData)
-    });
-    const success = res.status >= 200 && res.status < 400;
-    if (!success) {
-      console.log(await res.text());
-      throw Error('unable to send message');
+    if (!process.env.CODERED_DISARM) {
+      const res = await fetch("https://cascades.onsolve.net/api/v1/Alerts/oneStep", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(alertData)
+      });
+      const success = res.status >= 200 && res.status < 400;
+      if (!success) {
+        console.log(await res.text());
+        throw Error('unable to send message');
+      }
+    } else {
+      console.log('CODE RED DISARMED');
+      console.log(JSON.stringify(alertData, null, 2));
     }
   }
 }

@@ -15,5 +15,6 @@ export async function sendMessage(formData: FormData): Promise<void> {
   }
 
   await getCodeRed().sendMessage(session.user.email, message);
-  redirect(`/success?message=${encodeURIComponent(message!)}` );
+  const responseMessage = `${process.env.CODERED_DISARM ? '[disarmed] ' : ''}${message}`;
+  redirect(`/success?message=${encodeURIComponent(responseMessage)}` );
 }
