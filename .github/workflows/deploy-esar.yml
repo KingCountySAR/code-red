@@ -36,7 +36,7 @@ jobs:
           cp -r build/standalone/* release
           cp -r build/static release/build
           cp -r public release
-          zip -r release.zip release
+          zip -r ../release.zip release
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
