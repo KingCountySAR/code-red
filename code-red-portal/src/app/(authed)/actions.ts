@@ -1,17 +1,19 @@
 'use server'
 import { auth } from "@/auth";
+import { getCodeRed } from "@/services/code-red";
 import { redirect } from "next/navigation";
-
-function wait() {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), 1500);
-  });
-}
 
 export async function sendMessage(formData: FormData): Promise<void> {
   const session = await auth();
+  if (!session?.user?.email) {
+    throw Error("Can't get email for user");
+  }
+
   const message = formData.get('message')?.toString();
-  console.log(session?.user?.name,'Sending message', message);
-  await wait();
+  if (!message) {
+    throw Error("No message");
+  }
+
+  await getCodeRed().sendMessage(session.user.email, message);
   redirect(`/success?message=${encodeURIComponent(message!)}` );
 }
