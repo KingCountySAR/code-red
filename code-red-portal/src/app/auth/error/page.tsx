@@ -1,8 +1,8 @@
 "use client"
 
-import SignIn from "@/components/sign-in"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 enum Error {
   Configuration = "Configuration",
@@ -27,7 +27,7 @@ const errorMap = {
   ),
 }
 
-export default function AuthErrorPage() {
+function InnerPart() {
   const search = useSearchParams()
   const error = search.get("error") as Error
 
@@ -45,4 +45,8 @@ export default function AuthErrorPage() {
       </div>
     </div>
   )
+}
+
+export default function AuthErrorPage() {
+  return (<Suspense><InnerPart /></Suspense>);
 }
