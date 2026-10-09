@@ -9,10 +9,8 @@ type Token = {
   scope: "";
 };
 
-class PagingSys {
+class Everbridge {
   async getApiToken(): Promise<Token | null> {
-    let response = null;
-
     try {
       const response = await fetch(`${API_ROOT}/authorization/v1/tokens`, {
         method: "POST",
@@ -22,8 +20,8 @@ class PagingSys {
         },
         body: new URLSearchParams({
           grant_type: "client_credentials",
-          client_id: <string>process.env.ESAR_EB_CLIENT_ID,
-          client_secret: <string>process.env.ESAR_EB_CLIENT_SOURCE,
+          client_id: <string>process.env.EB_CLIENT_ID,
+          client_secret: <string>process.env.EB_CLIENT_SECRET,
         }),
       });
 
@@ -45,7 +43,7 @@ class PagingSys {
       incidentPhases: [
         {
           phaseTemplate: {
-            templateId: process.env.ESAR_EB_TEMPLATE,
+            templateId: process.env.EB_TEMPLATE,
             formTemplate: {
               preMessage: msg,
             },
@@ -56,7 +54,7 @@ class PagingSys {
 
     try {
       const response = await fetch(
-        `${API_ROOT}/rest/incidents/${process.env.ESAR_EB_ORGANIZATION}`,
+        `${API_ROOT}/rest/incidents/${process.env.EB_ORGANIZATION}`,
         {
           method: "POST",
           headers: {
@@ -84,16 +82,16 @@ class PagingSys {
   }
 }
 
-let instance: PagingSys | undefined;
+let instance: Everbridge | undefined;
 
 export function getPageSink() {
   let envConfigured = true;
 
   const required = [
-    "ESAR_EB_CLIENT_ID",
-    "ESAR_EB_CLIENT_SOURCE",
-    "ESAR_EB_TEMPLATE",
-    "ESAR_EB_ORGANIZATION",
+    "EB_CLIENT_ID",
+    "EB_CLIENT_SECRET",
+    "EB_TEMPLATE",
+    "EB_ORGANIZATION",
   ];
 
   const processEnvKeys = Object.keys(process.env);
@@ -102,7 +100,7 @@ export function getPageSink() {
 
   if (!envConfigured) throw new Error("Process environment misconfigured!");
 
-  instance = new PagingSys();
+  instance = new Everbridge();
 
   if (!instance) throw new Error("Instance creation error!");
 
